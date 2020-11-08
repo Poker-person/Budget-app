@@ -3,6 +3,7 @@ class Category:
 		self.name = name
 		self.ledger = []
 
+	# Appends a "amount" and "description" to ledger list
 	def deposit(self, amount, description = ''):
 		self.ledger.append({"amount": amount, "description": description})
 
@@ -13,12 +14,15 @@ class Category:
 		else:
 			return False
 
+	# Calculates balance based on ledger list "amount" entries
 	def get_balance(self):
 		balance = 0
 		for x in self.ledger:
 			balance += x['amount']
 		return balance
 
+	# Creates 2 entries on ledger, 1 as withdraw to the category where the transfer comes from
+	# and 1 as deposit on the category where the amount goes to
 	def transfer(self, amount, category):
 		if self.check_funds(amount):
 			self.withdraw(amount, f'Transfer to {category.name}')
@@ -27,6 +31,7 @@ class Category:
 		else:
 			return False
 
+	# Check if "amount" can be removed from balance, considering balance can't be negative
 	def check_funds(self, amount):
 		if amount > self.get_balance():
 			return False
@@ -50,6 +55,8 @@ def create_spend_chart(categories):
 	spent = []
 	spent_percentages = []
 
+	# Separates spent 'amounts' and calculates spent %
+	# rounded to the nearest 10
 	for category in categories:
 		total = 0
 		for item in category.ledger:
@@ -65,6 +72,7 @@ def create_spend_chart(categories):
 
 	labels = range(100, -10, -10)
 
+	# Adds the 'o' characters to the graph, displaing percentage
 	for label in labels:
 		graph += str(label).rjust(3) + "| "
 		for percent in spent_percentages:
